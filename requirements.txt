@@ -1,0 +1,17 @@
+streamlit
+langchain
+langchain-community
+langchain-core
+langchain-openai
+langchain-groq
+chromadb
+tiktoken
+pypdf
+langchain-huggingface
+langchain-experimental
+sentence_transformers
+faiss-cpu
+SQLAlchemy
+ipykernel
+validators==0.28.1
+youtube_transcript_api
