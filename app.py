@@ -37,12 +37,7 @@ if st.button("Summarize the content"):
         try:
             with st.spinner("Waiting..."):
                 ##loading the data
-                try:
-                    docs = data_loader(url)
-                except Exception as e:
-                    st.error("Error while loading data.")
-                    st.exception(e)
-
+                docs = data_loader(url)
                 #chain
                 chain = load_summarize_chain(llm= llm_model,
                                              chain_type="stuff",
