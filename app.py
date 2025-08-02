@@ -15,7 +15,7 @@ from config import calibrate_chain_type
 
 st.set_page_config(page_title="Website Text Summarizer")
 st.title("LangChain-Powered Web Summarizer")
-st.subheader("Provide a URL to summarize the content within seconds !")
+st.write("Provide a URL to summarize the content within seconds !")
 
 
 
@@ -28,13 +28,12 @@ url = st.text_input("URL", label_visibility="collapsed")
 
 summarization_method = st.selectbox(
     "Select Summarization Strategy:",
-    ["Stuff", "Map-Reduce"],
+    ["Stuff Technique", "Map-Reduce Technique"],
     help=(
-        "🧾 **Stuff**: Loads all content at once. Best for short or simple texts "
+        "**Stuff**: Loads all content at once. Best for short or simple texts "
         "(e.g., single blog posts, brief articles).\n\n"
-        "🧠 **Map-Reduce**: Splits content into chunks, summarizes each one individually "
-        "(Map), then combines those summaries into a final summary (Reduce). Ideal for "
-        "large documents, multiple articles, or when token limits are a concern."
+        "**Map-Reduce**: Splits content into chunks, summarizes each one individually, "
+        "then combines those summaries into a final summary. Ideal for large documents"
     )
 )
 
@@ -52,10 +51,10 @@ if st.button("Summarize the content"):
                 ##loading the data
                 docs = data_loader(url)
 
-                if summarization_method == "Stuff":
+                if summarization_method == "Stuff Technique":
                     chain_type = "stuff"
 
-                elif summarization_method == "Map-Reduce":
+                elif summarization_method == "Map-Reduce Technique":
                     chain_type = "map_reduce"
 
 
@@ -68,7 +67,22 @@ if st.button("Summarize the content"):
                 st.write(output_summary)
 
         except Exception as e:
-            st.exception(f"Exception: {e}")
+            error_message = str(e).lower()
+            
+            if any(phrase in error_message for phrase in [
+                "context_length_exceeded", 
+                "reduce the length", 
+                "maximum context length",
+                "context window",
+                "token limit",
+                "too long"
+            ]):
+                st.error("⚠️ Content Too Long for Stuff Technique!")
+                st.warning(
+                    "The content is too large to process with the **Stuff Technique**. "
+                    "Please switch to **Map-Reduce Technique** and try again."
+                )
+    
 
 
         
