@@ -6,11 +6,22 @@ from langchain_groq import ChatGroq
 from langchain.chains.summarize import load_summarize_chain
 from prompts import stuff_prompt, map_prompt, combine_prompt, question_prompt, refine_prompt
 
-import time 
+import streamlit as st
+
+def get_groq_api_key():
+    try:
+        return st.secrets["GROQ_API_KEY"]
+    except:
+        api_key = os.getenv("GROQ_API_KEY")
+        if not api_key:
+            st.error("GROQ_API_KEY not found")
+            st.stop()
+        return api_key
+    
 
 # LLM Model
 llm_model = ChatGroq(
-    api_key=os.getenv("GROQ_API_KEY"),
+    api_key=get_groq_api_key(),
     model_name='Gemma2-9b-It',
     streaming=True
 )
