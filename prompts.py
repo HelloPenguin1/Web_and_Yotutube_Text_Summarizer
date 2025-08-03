@@ -8,6 +8,8 @@ Directions:
 1) Be as accurate as possible while referencing the source content. 
 2) Openly use bullet points when necessary to separate complicated details into manageable chunks.
 3) Clarify a complicated concept in simpler words.
+5) Add a bolded title on top of the summary
+6) Below the title, mention the name of the website and the author (if any) and the date it was published.
 
 Content:{text}
 """
@@ -43,6 +45,8 @@ Directions:
 2) Openly use bullet points when necessary to separate complicated details into manageable chunks.
 3) Clarify a complicated concept in simpler words.
 4) Ensure the final summary flows well and covers all major points from the individual summaries.
+5) Add a bolded title on top of the summary
+6) Below the title, mention the name of the website and the author (if any) and the date it was published.
 
 Summaries to combine:
 {text}
@@ -86,6 +90,8 @@ Directions:
 2) Openly use bullet points when necessary to separate complicated details into manageable chunks.
 3) Clarify a complicated concept in simpler words.
 4) Ensure the final summary flows well and covers all information.
+5) Add a bolded title on top of the summary
+6) Below the title, mention the name of the website and the author (if any) and the date it was published.
 
 Refined summary:
 
