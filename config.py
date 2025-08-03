@@ -10,12 +10,13 @@ import streamlit as st
 
 def get_groq_api_key():
     try:
-        return st.secrets["GROQ_API_KEY"]
-    except:
-        api_key = os.getenv("GROQ_API_KEY")
-        if not api_key:
-            st.error("GROQ_API_KEY not found")
-            st.stop()
+        if hasattr(st, 'secrets') and 'GROQ_API_KEY' in st.secrets:
+            return st.secrets["GROQ_API_KEY"]
+    except Exception as e:
+        pass
+    
+    api_key = os.getenv("GROQ_API_KEY")
+    if api_key:
         return api_key
     
 
