@@ -9,15 +9,17 @@ from prompts import stuff_prompt, map_prompt, combine_prompt, question_prompt, r
 import streamlit as st
 
 def get_groq_api_key():
-    try:
-        if hasattr(st, 'secrets') and 'GROQ_API_KEY' in st.secrets:
-            return st.secrets["GROQ_API_KEY"]
-    except Exception as e:
-        pass
+    # Prioritize Streamlit secrets
+    if hasattr(st, 'secrets') and 'GROQ_API_KEY' in st.secrets:
+        return st.secrets["GROQ_API_KEY"]
     
+    # Fallback to environment variable (e.g., for local development without st.secrets)
     api_key = os.getenv("GROQ_API_KEY")
     if api_key:
         return api_key
+    
+    # If neither is found, raise an error or return None, depending on desired behavior
+    raise ValueError("GROQ_API_KEY not found in Streamlit secrets or environment variables.")
     
 
 # LLM Model
