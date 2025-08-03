@@ -1,16 +1,9 @@
 import validators
 import streamlit as st
 
-import os
-from dotenv import load_dotenv
-load_dotenv()
-
 from loader import data_loader
 from config import calibrate_chain_type
 
-
-#api key
-api_key = os.getenv("GROQ_API_KEY")
 
 
 # Title 

@@ -5,25 +5,25 @@ load_dotenv()
 from langchain_groq import ChatGroq
 from langchain.chains.summarize import load_summarize_chain
 from prompts import stuff_prompt, map_prompt, combine_prompt, question_prompt, refine_prompt
-
 import streamlit as st
 
-def get_groq_api_key():
-    # Prioritize Streamlit secrets
-    if hasattr(st, 'secrets') and 'GROQ_API_KEY' in st.secrets:
-        return st.secrets["GROQ_API_KEY"]
-    
-    api_key = os.getenv("GROQ_API_KEY")
-    if api_key:
-        return api_key
-    
-    # If neither is found, raise an error or return None, depending on desired behavior
-    raise ValueError("GROQ_API_KEY not found in Streamlit secrets or environment variables.")
-    
+
+def set_environment():
+    secret_keys = [
+        "GROQ_API_KEY"
+    ]
+    for key in secret_keys:
+        if key in st.secrets:
+            os.environ[key] = st.secrets[key]
+
+set_environment()
+
+
+
+
 
 # LLM Model
 llm_model = ChatGroq(
-    api_key=get_groq_api_key(),
     model_name='Gemma2-9b-It',
     streaming=True
 )
