@@ -9,7 +9,7 @@ Directions:
 2) Openly use bullet points when necessary to separate complicated details into manageable chunks.
 3) Clarify a complicated concept in simpler words.
 5) Add a bolded title on top of the summary
-6) Below the title, mention the name of the website and the author (if any) and the date it was published.
+6) Below the title, cite the source of the website/organization
 
 Content:{text}
 """
@@ -46,7 +46,8 @@ Directions:
 3) Clarify a complicated concept in simpler words.
 4) Ensure the final summary flows well and covers all major points from the individual summaries.
 5) Add a bolded title on top of the summary
-6) Below the title, mention the name of the website and the author (if any) and the date it was published.
+6) Below the title, cite the source of the website/organization
+
 
 Summaries to combine:
 {text}
@@ -91,7 +92,8 @@ Directions:
 3) Clarify a complicated concept in simpler words.
 4) Ensure the final summary flows well and covers all information.
 5) Add a bolded title on top of the summary
-6) Below the title, mention the name of the website and the author (if any) and the date it was published.
+6) Below the title, cite the source of the website/organization
+
 
 Refined summary:
 

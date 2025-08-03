@@ -8,13 +8,54 @@ load_dotenv()
 from loader import data_loader
 from config import calibrate_chain_type
 
-# Title 
-st.set_page_config(page_title="Website Text Summarizer")
-st.title("LangChain-Powered Web Summarizer")
-st.write("Provide a URL to summarize the content within seconds !")
 
 #api key
 api_key = os.getenv("GROQ_API_KEY")
+
+
+# Title 
+st.set_page_config(page_title="Website Text Summarizer")
+st.title("🦜LangChain: Web Summarizer")
+st.write("Provide a URL to summarize the content within seconds !")
+
+#Side bar contents
+st.sidebar.header("📋 About This Project")
+
+st.sidebar.markdown("""
+### LangChain Based Web Content Summarizer
+
+This application uses **LangChain** and **Groq's Gemma2-9b-It** model to automatically summarize web content.
+
+---
+### 🛠️ How It Works
+1. **Enter any website URL**
+2. **Choose your summarization strategy**
+3. **Get a clear summary in seconds
+
+---
+
+### 📊 Summarization Strategies
+
+**🔹 Stuff Technique**
+- Processes entire content at once
+- Faster processing
+- Best for: Blog posts, news articles, short pages
+                    
+                    
+**🔹 Map-Reduce Technique**
+- Breaks content into chunks
+- Summarizes each chunk individually
+- Combines all summaries
+- Best for: Long articles, documentation
+
+**🔹 Refine Technique**
+- Starts with initial summary from first chunk
+- Progressively refines summary with each new chunk
+- Maintains context and narrative flow
+- Best for: Complex documents, stories, educational content
+
+""")
+
 
 
 #Initializing session state variables
@@ -42,56 +83,61 @@ summarization_method = st.selectbox(
     )
 )
 
+if url:
+    if st.button("Summarize the content"):
+        if not url.strip():
+            st.error("Please enter a URL to get started")
+        elif not validators.url(url):
+            st.error("Please enter a valid URL")
+        else:
+            try:
+                with st.spinner("Just a moment..."):
+                    ##loading the data
+                    docs = data_loader(url)
 
-if st.button("Summarize the content"):
-    if not url.strip():
-        st.error("Please enter a URL to get started")
-    elif not validators.url(url):
-        st.error("Please enter a valid URL")
+                    if summarization_method == "Stuff Technique":
+                        chain_type = "stuff"
 
-    else:
-        try:
-            with st.spinner("Just a moment..."):
-                ##loading the data
-                docs = data_loader(url)
+                    elif summarization_method == "Map-Reduce Technique":
+                        chain_type = "map_reduce"
+                    
+                    else:
+                        chain_type = "refine"
 
-                if summarization_method == "Stuff Technique":
-                    chain_type = "stuff"
 
-                elif summarization_method == "Map-Reduce Technique":
-                    chain_type = "map_reduce"
+                    #summary chain declaration   
+                    chain = calibrate_chain_type(chain_type)
+
+                    output_summary = chain.run(docs)
+                    
+                    #saving value to session state
+                    st.session_state.summary_result = output_summary
+
+                    
+            except Exception as e:
+                error_message = str(e).lower()
                 
-                else:
-                    chain_type = "refine"
+                if any(phrase in error_message for phrase in [
+                    "context_length_exceeded", 
+                    "reduce the length", 
+                    "maximum context length",
+                    "context window",
+                    "token limit",
+                    "too long"
+                ]):
+                    st.error("⚠️ Content Too Long for Stuff Technique!")
+                    st.warning(
+                        "The content is too large to process with the **Stuff Technique**. "
+                        "Please switch to **Map-Reduce Technique** and try again."
+                    )
 
-
-                #summary chain declaration   
-                chain = calibrate_chain_type(chain_type)
-
-                output_summary = chain.run(docs)
-                
-                #saving value to session state
-                st.session_state.summary_result = output_summary
-
-                
-
-        except Exception as e:
-            error_message = str(e).lower()
-            
-            if any(phrase in error_message for phrase in [
-                "context_length_exceeded", 
-                "reduce the length", 
-                "maximum context length",
-                "context window",
-                "token limit",
-                "too long"
-            ]):
-                st.error("⚠️ Content Too Long for Stuff Technique!")
-                st.warning(
-                    "The content is too large to process with the **Stuff Technique**. "
-                    "Please switch to **Map-Reduce Technique** and try again."
-                )
-    
+                elif any(phrase in error_message for phrase in [
+                    "access denied",
+                    "you do not have permissons"
+                ]):
+                    st.error("This website does not provide permission for access."
+                             "Please try a different url")
+        
 # once summary is generated, add option to clear session variables and summary and start fresh
 if st.session_state.summary_result:
     st.success("Your summary is successfully generated! Take a look...")
