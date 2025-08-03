@@ -30,7 +30,6 @@ def calibrate_chain_type(chain_type):
     else:
         chain = load_summarize_chain(llm= llm_model, 
                                      chain_type="refine",
-                                     prompt=stuff_prompt,
                                      question_prompt = question_prompt,
                                      refine_prompt = refine_prompt,
                                      verbose = True)

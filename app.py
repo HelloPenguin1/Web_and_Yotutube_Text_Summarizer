@@ -19,7 +19,7 @@ api_key = os.getenv("GROQ_API_KEY")
 
 #Initializing session state variables
 if "summary_result" not in st.session_state:
-    st.session_state.summary_results = None
+    st.session_state.summary_result = None
 if "url_input" not in st.session_state:
     st.session_state.url_input = None
 
@@ -27,7 +27,6 @@ if "url_input" not in st.session_state:
 # URL
 url = st.text_input("URL", label_visibility="collapsed", value=st.session_state.url_input)
 
-clear_button = st.sidebar.button("Clear Session")
 
 
 summarization_method = st.selectbox(
@@ -37,9 +36,9 @@ summarization_method = st.selectbox(
         "**Stuff**: Loads all content at once. Best for short or simple texts "
         "(e.g., single blog posts, brief articles).\n\n"
         "**Map-Reduce**: Splits content into chunks, summarizes each one individually, "
-        "then combines those summaries into a final summary. Ideal for large documents"
-        "**Refine (Advanced)** Starts with a base summary and enhances it progressively by refining it"
-        "using each new chunk of content. Useful for detailed, accurate summaries."
+        "then combines those summaries into a final summary. Ideal for large documents.\n\n"
+        "**Refine (Advanced)** Starts with a base summary and enhances it progressively"
+        " by using each new chunk of content. Useful for detailed, accurate summaries."
     )
 )
 
@@ -101,6 +100,7 @@ if st.session_state.summary_result:
    
     if st.button("Clear Output", type="secondary", key="clear_output"):
         st.session_state.summary_result = None
+        st.session_state.url_input = ""
         st.rerun()
 
         
