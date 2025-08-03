@@ -13,7 +13,6 @@ def get_groq_api_key():
     if hasattr(st, 'secrets') and 'GROQ_API_KEY' in st.secrets:
         return st.secrets["GROQ_API_KEY"]
     
-    # Fallback to environment variable (e.g., for local development without st.secrets)
     api_key = os.getenv("GROQ_API_KEY")
     if api_key:
         return api_key
