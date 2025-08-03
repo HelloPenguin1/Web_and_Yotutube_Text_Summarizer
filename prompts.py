@@ -51,3 +51,45 @@ Final comprehensive summary:
 """
 
 combine_prompt = PromptTemplate(template=combine_prompt_template, input_variables=['text'])
+
+
+
+# Refine summarization prompt
+question_prompt_temp = """
+You are an expert text summarizer. 
+Create a initial summary of the following content. Focus on the main points and key information.
+
+Text chunk:
+{text}
+
+Summary:
+"""
+
+question_prompt = PromptTemplate(template=question_prompt_temp, input_variables=['text'])
+
+
+
+refine_prompt_template = """
+You are an expert text summarizer.
+You have been provided with an existing summary up to a certain point: {existing_answer}
+
+Now you have to refine the existing summary with some more context below.
+
+New content:
+{text}
+
+Given the new context, refine the original summary to create a comprehensive final summary of 300 - 400 words.
+If the new content is not relevant, return the original summary unchanged.
+
+Directions: 
+1) Be as accurate as possible while referencing the source content. 
+2) Openly use bullet points when necessary to separate complicated details into manageable chunks.
+3) Clarify a complicated concept in simpler words.
+4) Ensure the final summary flows well and covers all information.
+
+Refined summary:
+
+"""
+
+refine_prompt = PromptTemplate(template = refine_prompt_template, 
+                               input_variables=['existing_answer', 'text'])

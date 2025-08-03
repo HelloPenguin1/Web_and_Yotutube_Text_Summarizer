@@ -28,12 +28,14 @@ url = st.text_input("URL", label_visibility="collapsed")
 
 summarization_method = st.selectbox(
     "Select Summarization Strategy:",
-    ["Stuff Technique", "Map-Reduce Technique"],
+    ["Stuff Technique", "Map-Reduce Technique", "Refine Technique"],
     help=(
         "**Stuff**: Loads all content at once. Best for short or simple texts "
         "(e.g., single blog posts, brief articles).\n\n"
         "**Map-Reduce**: Splits content into chunks, summarizes each one individually, "
         "then combines those summaries into a final summary. Ideal for large documents"
+        "**Refine (Advanced)** Starts with a base summary and enhances it progressively by refining it"
+        "using each new chunk of content. Useful for detailed, accurate summaries."
     )
 )
 
@@ -56,6 +58,9 @@ if st.button("Summarize the content"):
 
                 elif summarization_method == "Map-Reduce Technique":
                     chain_type = "map_reduce"
+                
+                else:
+                    chain_type = "refine"
 
 
                 #summary chain declaration   
