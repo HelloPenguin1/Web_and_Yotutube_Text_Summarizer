@@ -19,11 +19,9 @@ def set_environment():
 set_environment()
 
 
-
-
-
 # LLM Model
 llm_model = ChatGroq(
+    api_key=os.environ.get("GROQ_API_KEY"),
     model_name='Gemma2-9b-It',
     streaming=True
 )
