@@ -1,30 +1,34 @@
 import validators
 import streamlit as st
 
-
-
 import os
 from dotenv import load_dotenv
 load_dotenv()
 
-
 from loader import data_loader
 from config import calibrate_chain_type
 
-
-
+# Title 
 st.set_page_config(page_title="Website Text Summarizer")
 st.title("LangChain-Powered Web Summarizer")
 st.write("Provide a URL to summarize the content within seconds !")
 
-
-
-
+#api key
 api_key = os.getenv("GROQ_API_KEY")
 
 
+#Initializing session state variables
+if "summary_result" not in st.session_state:
+    st.session_state.summary_results = None
+if "url_input" not in st.session_state:
+    st.session_state.url_input = None
 
-url = st.text_input("URL", label_visibility="collapsed")
+
+# URL
+url = st.text_input("URL", label_visibility="collapsed", value=st.session_state.url_input)
+
+clear_button = st.sidebar.button("Clear Session")
+
 
 summarization_method = st.selectbox(
     "Select Summarization Strategy:",
@@ -38,7 +42,6 @@ summarization_method = st.selectbox(
         "using each new chunk of content. Useful for detailed, accurate summaries."
     )
 )
-
 
 
 if st.button("Summarize the content"):
@@ -67,9 +70,11 @@ if st.button("Summarize the content"):
                 chain = calibrate_chain_type(chain_type)
 
                 output_summary = chain.run(docs)
-                    
-                st.success("Your summary is successfully generated! Take a look...")
-                st.write(output_summary)
+                
+                #saving value to session state
+                st.session_state.summary_result = output_summary
+
+                
 
         except Exception as e:
             error_message = str(e).lower()
@@ -88,6 +93,14 @@ if st.button("Summarize the content"):
                     "Please switch to **Map-Reduce Technique** and try again."
                 )
     
-
+# once summary is generated, add option to clear session variables and summary and start fresh
+if st.session_state.summary_result:
+    st.success("Your summary is successfully generated! Take a look...")
+    st.write(st.session_state.summary_result)
+    
+   
+    if st.button("Clear Output", type="secondary", key="clear_output"):
+        st.session_state.summary_result = None
+        st.rerun()
 
         
