@@ -8,20 +8,10 @@ from prompts import stuff_prompt, map_prompt, combine_prompt, question_prompt, r
 import streamlit as st
 
 
-def set_environment():
-    secret_keys = [
-        "GROQ_API_KEY"
-    ]
-    for key in secret_keys:
-        if key in st.secrets:
-            os.environ[key] = st.secrets[key]
-
-set_environment()
-
 
 # LLM Model
 llm_model = ChatGroq(
-    api_key=os.environ.get("GROQ_API_KEY"),
+    api_key=st.secrets["GROQ_API_KEY"],
     model_name='Gemma2-9b-It',
     streaming=True
 )
